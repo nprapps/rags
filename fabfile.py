@@ -27,10 +27,10 @@ SERVICES = [('%(project_name)s' % env, '/etc/init/', 'conf')]
 """
 Environments
 """
-def production():
-    env.settings = 'production'
+def utils():
+    env.settings = 'utils'
     env.s3_buckets = ['apps.npr.org', 'apps2.npr.org']
-    env.hosts = ['54.214.20.225']
+    env.hosts = ['54.244.243.254']
 
 
 """
@@ -59,10 +59,10 @@ def branch(branch_name):
 
 def _confirm_branch():
     """
-    Confirm a production deployment.
+    Confirm a utils deployment.
     """
-    if (env.settings == 'production' and env.branch != 'stable'):
-        answer = prompt("You are trying to deploy the '%(branch)s' branch to production.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env, default="Not at all")
+    if (env.settings == 'utils' and env.branch != 'stable'):
+        answer = prompt("You are trying to deploy the '%(branch)s' branch to utils.\nYou should really only deploy a stable branch.\nDo you know what you're doing?" % env, default="Not at all")
         if answer not in ('y','Y','yes','Yes','buzz off','screw you'):
             exit()
 
@@ -74,7 +74,7 @@ def setup():
     """
     Setup servers for deployment.
     """
-    require('settings', provided_by=[production])
+    require('settings', provided_by=[utils])
     require('branch', provided_by=[stable, master, branch])
 
     setup_directories()
@@ -88,7 +88,7 @@ def setup_directories():
     """
     Create server directories.
     """
-    require('settings', provided_by=[production])
+    require('settings', provided_by=[utils])
 
     run('mkdir -p %(path)s' % env)
 
@@ -97,7 +97,7 @@ def clone_repo():
     """
     Clone the source repository.
     """
-    require('settings', provided_by=[production])
+    require('settings', provided_by=[utils])
 
     run('git clone %(repo_url)s %(repo_path)s' % env)
 
@@ -109,7 +109,7 @@ def checkout_latest(remote='origin'):
     """
     Checkout the latest source.
     """
-    require('settings', provided_by=[production])
+    require('settings', provided_by=[utils])
 
     env.remote = remote
 
@@ -121,7 +121,7 @@ def install_requirements():
     """
     Install the latest requirements.
     """
-    require('settings', provided_by=[production])
+    require('settings', provided_by=[utils])
 
     run('cd %(repo_path)s; npm install' % env)
 
@@ -130,7 +130,7 @@ def render_confs():
     """
     Renders server configurations.
     """
-    require('settings', provided_by=[production])
+    require('settings', provided_by=[utils])
 
     with settings(warn_only=True):
         local('mkdir confs/rendered')
@@ -155,7 +155,7 @@ def deploy_confs():
     """
     Deploys rendered server configurations to the specified server.
     """
-    require('settings', provided_by=[production])
+    require('settings', provided_by=[utils])
 
     render_confs()
 
@@ -173,12 +173,12 @@ def deploy_confs():
 Deployment
 """
 def restart_init():
-    require('settings', provided_by=[production])
+    require('settings', provided_by=[utils])
     sudo('service rags restart')
 
 
 def deploy(remote='origin'):
-    require('settings', provided_by=[production])
+    require('settings', provided_by=[utils])
     require('branch', provided_by=[stable, master, branch])
 
     _confirm_branch()
