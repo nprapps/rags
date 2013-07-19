@@ -80,7 +80,7 @@ def setup():
     clone_repo()
     checkout_latest()
     install_requirements()
-    setup_init()
+    deploy_confs()
 
 
 def setup_directories():
