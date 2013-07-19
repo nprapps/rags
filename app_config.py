@@ -13,12 +13,12 @@ PROJECT_SLUG = 'rags'
 REPOSITORY_NAME = 'rags'
 CONFIG_NAME = PROJECT_SLUG.upper()
 
-PRODUCTION_S3_BUCKETS = ['apps.npr.org', 'apps2.npr.org']
-PRODUCTION_SERVERS = ['54.214.20.225']
+# PRODUCTION_S3_BUCKETS = ['apps.npr.org', 'apps2.npr.org']
+# PRODUCTION_SERVERS = ['54.214.20.225']
 
-S3_BUCKETS = []
-SERVERS = []
-DEBUG = True
+# S3_BUCKETS = []
+# SERVERS = []
+# DEBUG = True
 
 def get_secrets():
     """

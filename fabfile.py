@@ -142,7 +142,7 @@ def render_confs():
     context['DEPLOYMENT_TARGET'] = env.settings
 
     for service, remote_path, extension in SERVICES:
-        file_path = 'confs/rendered/%s.%s.%s' % (app_config.PROJECT_SLUG, service, extension)
+        file_path = 'confs/rendered/%s.%s' % (service, extension)
 
         with open('confs/%s.%s' % (service, extension),  'r') as read_template:
 
@@ -164,12 +164,9 @@ def deploy_confs():
         sudo('chmod 777 /tmp/%s.sock' % app_config.PROJECT_SLUG)
 
         for service, remote_path, extension in SERVICES:
-            service_name = '%s.%s' % (app_config.PROJECT_SLUG, service)
-            file_name = '%s.%s' % (service_name, extension)
+            file_name = '%s.%s' % (service, extension)
             local_path = 'confs/rendered/%s' % file_name
-            with settings(warn_only=True):
-                sudo('ln -s %(repo_path)s/confs/rendered/%(project_name)s.conf /etc/init/%(project_name)s.conf' % env)
-            sudo('initctl reload-configuration')
+            put(local_path, remote_path, use_sudo=True)
 
 
 """
