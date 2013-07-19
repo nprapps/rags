@@ -21,7 +21,7 @@ env.repo_path = '%(path)s' % env
 env.forward_agent = True
 env.user = 'ubuntu'
 
-SERVICES = [('app', '%(repo_path)s' % env , 'ini')]
+SERVICES = [('%(project_name)s', '/etc/init/' % 'conf')]
 
 """
 Environments
@@ -125,22 +125,6 @@ def install_requirements():
     run('cd %(repo_path)s; npm install' % env)
 
 
-def setup_init():
-    """
-    Creates the init script.
-    """
-    require('settings', provided_by=[production])
-    with settings(warn_only=True):
-        sudo('ln -s %(repo_path)s/%(project_name)s.conf /etc/init/%(project_name)s.conf' % env)
-    sudo('initctl reload-configuration')
-
-"""
-Deployment
-"""
-def restart_init():
-    require('settings', provided_by=[production])
-    sudo('service totebot restart')
-
 def render_confs():
     """
     Renders server configurations.
@@ -165,6 +149,7 @@ def render_confs():
                 payload = Template(read_template.read())
                 write_template.write(payload.render(**context))
 
+
 def deploy_confs():
     """
     Deploys rendered server configurations to the specified server.
@@ -181,7 +166,17 @@ def deploy_confs():
             service_name = '%s.%s' % (app_config.PROJECT_SLUG, service)
             file_name = '%s.%s' % (service_name, extension)
             local_path = 'confs/rendered/%s' % file_name
-            put(local_path, remote_path, use_sudo=True)
+            with settings(warn_only=True):
+                sudo('ln -s %(repo_path)s/confs/rendered/%(project_name)s.conf /etc/init/%(project_name)s.conf' % env)
+            sudo('initctl reload-configuration')
+
+
+"""
+Deployment
+"""
+def restart_init():
+    require('settings', provided_by=[production])
+    sudo('service totebot restart')
 
 
 def deploy(remote='origin'):
