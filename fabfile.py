@@ -18,7 +18,6 @@ env.path = '/home/%(user)s/apps/%(project_name)s' % env
 env.repo_path = '%(path)s' % env
 env.forward_agent = True
 env.user = 'ubuntu'
-env.key_filename = os.environ.get('KEY_FILENAME')
 
 SERVICES = ('app', '%(repo_path)s' % env , 'ini')
 
@@ -144,7 +143,7 @@ def render_confs():
     """
     Renders server configurations.
     """
-    require('settings', provided_by=[production, staging])
+    require('settings', provided_by=[production])
 
     with settings(warn_only=True):
         local('mkdir confs/rendered')
@@ -168,7 +167,7 @@ def deploy_confs():
     """
     Deploys rendered server configurations to the specified server.
     """
-    require('settings', provided_by=[production, staging])
+    require('settings', provided_by=[production])
 
     render_confs()
 
