@@ -21,7 +21,7 @@ env.repo_path = '%(path)s' % env
 env.forward_agent = True
 env.user = 'ubuntu'
 
-SERVICES = ('app', '%(repo_path)s' % env , 'ini')
+SERVICES = [('app', '%(repo_path)s' % env , 'ini')]
 
 """
 Environments
