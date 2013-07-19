@@ -3,6 +3,7 @@
 import os
 
 from fabric.api import *
+from jinja2 import Template
 
 import app_config
 
@@ -176,7 +177,7 @@ Deployment
 """
 def restart_init():
     require('settings', provided_by=[production])
-    sudo('service totebot restart')
+    sudo('service rags restart')
 
 
 def deploy(remote='origin'):
