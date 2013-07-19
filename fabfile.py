@@ -20,6 +20,7 @@ env.forward_agent = True
 env.user = 'ubuntu'
 env.key_filename = os.environ.get('KEY_FILENAME')
 
+SERVICES = ('app', '%(repo_path)s' % env , 'ini')
 
 """
 Environments
@@ -132,13 +133,54 @@ def setup_init():
         sudo('ln -s %(repo_path)s/%(project_name)s.conf /etc/init/%(project_name)s.conf' % env)
     sudo('initctl reload-configuration')
 
-
 """
 Deployment
 """
 def restart_init():
     require('settings', provided_by=[production])
     sudo('service totebot restart')
+
+def render_confs():
+    """
+    Renders server configurations.
+    """
+    require('settings', provided_by=[production, staging])
+
+    with settings(warn_only=True):
+        local('mkdir confs/rendered')
+
+    context = app_config.get_secrets()
+    context['PROJECT_SLUG'] = app_config.PROJECT_SLUG
+    context['PROJECT_NAME'] = app_config.PROJECT_NAME
+    context['REPOSITORY_NAME'] = app_config.REPOSITORY_NAME
+    context['DEPLOYMENT_TARGET'] = env.settings
+
+    for service, remote_path, extension in SERVICES:
+        file_path = 'confs/rendered/%s.%s.%s' % (app_config.PROJECT_SLUG, service, extension)
+
+        with open('confs/%s.%s' % (service, extension),  'r') as read_template:
+
+            with open(file_path, 'wb') as write_template:
+                payload = Template(read_template.read())
+                write_template.write(payload.render(**context))
+
+def deploy_confs():
+    """
+    Deploys rendered server configurations to the specified server.
+    """
+    require('settings', provided_by=[production, staging])
+
+    render_confs()
+
+    with settings(warn_only=True):
+        run('touch /tmp/%s.sock' % app_config.PROJECT_SLUG)
+        sudo('chmod 777 /tmp/%s.sock' % app_config.PROJECT_SLUG)
+
+        for service, remote_path, extension in SERVICES:
+            service_name = '%s.%s' % (app_config.PROJECT_SLUG, service)
+            file_name = '%s.%s' % (service_name, extension)
+            local_path = 'confs/rendered/%s' % file_name
+            put(local_path, remote_path, use_sudo=True)
 
 
 def deploy(remote='origin'):
