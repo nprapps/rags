@@ -7,10 +7,10 @@ from fabric.api import *
 """
 Base configuration
 """
-env.project_name = 'totebot2'
-env.deployed_name = 'totebot2'
+env.project_name = 'rags'
+env.deployed_name = 'rags'
 env.deploy_to_servers = False
-env.repo_url = 'git://github.com/nprapps/totebot2.git'
+env.repo_url = 'git://github.com/nprapps/rags.git'
 env.alt_repo_url = None
 env.user = 'ubuntu'
 env.python = 'python2.7'
