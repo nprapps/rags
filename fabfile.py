@@ -21,7 +21,7 @@ env.repo_path = '%(path)s' % env
 env.forward_agent = True
 env.user = 'ubuntu'
 
-SERVICES = [('%(project_name)s', '/etc/init/' % 'conf')]
+SERVICES = [('%(project_name)s' % env, '/etc/init/', 'conf')]
 
 """
 Environments
