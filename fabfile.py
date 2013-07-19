@@ -4,6 +4,8 @@ import os
 
 from fabric.api import *
 
+import app_config
+
 """
 Base configuration
 """
