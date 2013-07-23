@@ -167,6 +167,7 @@ def deploy_confs():
             file_name = '%s.%s' % (service, extension)
             local_path = 'confs/rendered/%s' % file_name
             put(local_path, remote_path, use_sudo=True)
+        sudo('initctl reload-configuration')
 
 
 """
