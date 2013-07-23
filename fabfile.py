@@ -160,8 +160,6 @@ def deploy_confs():
     render_confs()
 
     with settings(warn_only=True):
-        run('touch /tmp/%s.sock' % app_config.PROJECT_SLUG)
-        sudo('chmod 777 /tmp/%s.sock' % app_config.PROJECT_SLUG)
 
         for service, remote_path, extension in SERVICES:
             file_name = '%s.%s' % (service, extension)
