@@ -76,12 +76,15 @@ get_food_trucks = (msg) ->
             msg.send trucks
 
 module.exports = (robot) ->
-    robot.respond /me want food/i, (msg) ->
+    robot.respond /me want food|menu me|what's for lunch/i, (msg) ->
       get_soundbites_menu(msg)
+      get_food_trucks(msg)
 
     robot.respond /food truck me/i, (msg) ->
       get_food_trucks(msg)
 
-    robot.hear /lunch|feed me/i, (msg) ->
-      get_soundbites_menu(msg)
-      get_food_trucks(msg)
+    robot.hear /lunch/i, (msg) ->
+      name = msg.message.user.name
+      if name == 'BrianBoyer'
+        get_soundbites_menu(msg)
+        get_food_trucks(msg)
