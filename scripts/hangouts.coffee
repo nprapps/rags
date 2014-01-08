@@ -62,7 +62,7 @@ module.exports = (robot) ->
 
     createCalendarEvent msg, summary, description, (err, event) ->
       if err
-        msg.send "I'm sorry. Something went wrong and I wasn't able to create a hangout :("
+        msg.send "I'm sorry. Something went wrong and I wasn't able to create a hangout :(" + '\n' + err.message
       else
         response  = "I've started a hangout titled '#{summary}'\n"
         response += "Primary account: #{event.hangoutLink}\n"
