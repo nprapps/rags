@@ -20,3 +20,5 @@ pizzas = [
 module.exports = (robot) ->
   robot.respond /(pizza me)/i, (msg) ->
     msg.send msg.random pizzas
+  robot.respond /(pizza fax)/i, (msg) ->
+    msg.send pizzas[2]
