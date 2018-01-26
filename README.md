@@ -1,4 +1,9 @@
 # Rags
+======
+
+**This project is no longer maintained. We have updated javascript dependencies due to github security warning but have not tested the actual impact of that measure on the app functionality.**
+
+Updated javascript dependencies due to github security warning.
 
 Derived from the robot dog from the Woody Allen movie Sleeper, Rags follows our conversations on HipChat and provides us with some ambient awareness. Also, humor.
 

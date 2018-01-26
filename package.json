@@ -24,8 +24,8 @@
     "hubot-scripts": ">= 2.5.0 < 3.0.0",
     "hubot-hipchat": "~2.5.1-4",
     "jsdom": "~0.8.1",
-    "moment": "~2.1.0",
-    "jquery": "~1.8.3",
+    "moment": "~>2.11.2",
+    "jquery": "~>3.0.0",
     "googleapis": ""
   },
   "engines": {
